@@ -3,68 +3,63 @@ package day1
 import (
 	"bufio"
 	"fmt"
-	"log"
+	"github.com/jgrove2/advent-of-go/internal/common"
 	"os"
-	"strconv"
 	"strings"
-	"unicode"
 )
 
-func Part1() int {
-	fmt.Println("Running Day 1 Pt 1...")
-	file, err := os.Open("./internal/day1/input.txt")
+func Day1() {
+	fmt.Println("Runnin Day1...")
+	fileLoc := "./internal/day1/input.txt"
+	part1, err := common.RunPart(Part1, fileLoc)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
-	defer file.Close()
+	fmt.Println(part1)
+	part2, err := common.RunPart(Part2, fileLoc)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(part2)
+}
+
+func Part1(fp *os.File) (int, error) {
+	fmt.Println("Running Pt 1...")
 	totalValue := 0
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(fp)
 	for scanner.Scan() {
 		scannedLine := scanner.Text()
-		firstValue := ""
-		lastValue := ""
+		firstValue := -1
+		lastValue := -1
 		for _, char := range scannedLine {
-			if unicode.IsNumber(char) {
-				if firstValue == "" {
-					firstValue = string(char)
+			if char >= '0' && char <= '9' {
+				if firstValue == -1 {
+					firstValue = int(char) - 48
 				} else {
-					lastValue = string(char)
+					lastValue = int(char) - 48
 				}
 			}
 		}
-		if firstValue != "" {
-			if lastValue != "" {
-				i, err := strconv.Atoi(firstValue + lastValue)
-				if err != nil {
-					log.Fatal(err)
-				}
-				totalValue += i
+		if firstValue != -1 {
+			if lastValue != -1 {
+				totalValue += firstValue*10 + lastValue
 			} else {
-				i, err := strconv.Atoi(firstValue + firstValue)
-				if err != nil {
-					log.Fatal(err)
-				}
-				totalValue += i
+				totalValue += firstValue*10 + firstValue
 			}
 		}
 	}
 
 	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		return -1, err
 	}
 
-	return totalValue
+	return totalValue, nil
 }
 
-func Part2() int {
+func Part2(fp *os.File) (int, error) {
 	fmt.Println("Running Day 1 Pt2...")
-	file, err := os.Open("./internal/day1/input.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
 	totalValue := 0
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(fp)
 	speltNumbers := [10]string{
 		"zero",
 		"one",
@@ -77,27 +72,14 @@ func Part2() int {
 		"eight",
 		"nine",
 	}
-	numbers := map[string]int{
-		"0": 0,
-		"1": 1,
-		"2": 2,
-		"3": 3,
-		"4": 4,
-		"5": 5,
-		"6": 6,
-		"7": 7,
-		"8": 8,
-		"9": 9,
-	}
 	for scanner.Scan() {
 		scannedLine := scanner.Text()
-		firstValue := 0
-		lastValue := 0
+		firstValue := -1
+		lastValue := -1
 	frontSide:
 		for i := 0; i < len(scannedLine); i++ {
-			n, ok := numbers[string(scannedLine[i])]
-			if ok {
-				firstValue = n
+			if scannedLine[i] >= '0' && scannedLine[i] <= '9' {
+				firstValue = int(scannedLine[i]) - 48
 				break frontSide
 			}
 			frontWindow := scannedLine[0 : i+1]
@@ -110,9 +92,8 @@ func Part2() int {
 		}
 	backSide:
 		for i := len(scannedLine) - 1; i >= 0; i-- {
-			n, ok := numbers[string(scannedLine[i])]
-			if ok {
-				lastValue = n
+			if scannedLine[i] >= '0' && scannedLine[i] <= '9' {
+				lastValue = int(scannedLine[i]) - 48
 				break backSide
 			}
 			backWindow := scannedLine[i:]
@@ -123,27 +104,21 @@ func Part2() int {
 				}
 			}
 		}
-		if firstValue != 0 {
-			if lastValue != 0 {
-				i, err := strconv.Atoi(fmt.Sprintf("%d%d", firstValue, lastValue))
-				if err != nil {
-					log.Fatal(err)
-				}
+		if firstValue != -1 {
+			if lastValue != -1 {
+				i := firstValue*10 + lastValue
 				totalValue += i
 			} else {
-				i, err := strconv.Atoi(fmt.Sprintf("%d%d", firstValue, firstValue))
-				if err != nil {
-					log.Fatal(err)
-				}
+				i := firstValue*10 + firstValue
 				totalValue += i
 			}
 		}
 	}
 
 	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		return -1, err
 	}
 
-	return totalValue
+	return totalValue, nil
 
 }
