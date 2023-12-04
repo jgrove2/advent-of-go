@@ -1,15 +1,14 @@
-package tests
+package day2
 
 import (
 	"fmt"
 	"github.com/jgrove2/advent-of-go/internal/common"
-	"github.com/jgrove2/advent-of-go/internal/day2"
 	"testing"
 )
 
 func TestPart2(t *testing.T) {
-	fileLoc := "../../internal/day2/part2_test_input.txt"
-	answer, err := common.RunPart(day2.Part2, fileLoc)
+	fileLoc := "./part2_test_input.txt"
+	answer, err := common.RunPart(Part2, fileLoc)
 	if err != nil {
 		fmt.Println(err)
 		t.Errorf("There has been an error running Part2")
