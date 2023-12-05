@@ -1,13 +1,13 @@
-package day2
+package day4
 
 import (
 	"fmt"
 	"github.com/jgrove2/advent-of-go/internal/common"
 )
 
-func Day2() {
-	fmt.Println("Runnin Day2...")
-	fileLoc := "./internal/day2/input.txt"
+func Day4() {
+	fmt.Println("Runnin Day4...")
+	fileLoc := "./internal/day4/input.txt"
 	part1, err := common.RunPart(Part1, fileLoc)
 	if err != nil {
 		fmt.Println(err)
